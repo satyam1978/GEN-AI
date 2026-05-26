@@ -1,6 +1,4 @@
-// ==========================================
-// Backend Server (server.js)
-// ==========================================
+/
 
 import express from "express";
 import cors from "cors";
@@ -18,27 +16,22 @@ const ai = new GoogleGenAI({
   apiKey: process.env.API_KEY,
 });
 
-// ==========================================
-// Conversation Memory
-// ==========================================
+
 
 const history = [];
 
-// ==========================================
-// Chat API
-// ==========================================
 
 app.post("/chat", async (req, res) => {
   try {
     const userProblem = req.body.message;
 
-    // Store User Message
+    
     history.push({
       role: "user",
       parts: [{ text: userProblem }],
     });
 
-    // Generate AI Response
+    
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
 
@@ -91,16 +84,16 @@ Make the interaction feel natural, warm, and personal`,
       },
     });
 
-    // Extract Reply
+    
     const botReply = response.text;
 
-    // Store Model Reply
+    
     history.push({
       role: "model",
       parts: [{ text: botReply }],
     });
 
-    // Send Response
+    
     res.json({
       reply: botReply,
     });
@@ -113,9 +106,7 @@ Make the interaction feel natural, warm, and personal`,
   }
 });
 
-// ==========================================
-// Server Start
-// ==========================================
+
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");

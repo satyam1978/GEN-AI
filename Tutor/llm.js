@@ -1,18 +1,4 @@
-// ==============================================
-// Engineering Tutor AI Backend Server
-// ==============================================
-//
-// This backend connects your frontend UI
-// with the Gemini API.
-//
-// Features:
-// - Conversation Memory
-// - Engineering Tutor System
-// - REST API Support
-// - Frontend Connectable
-// - Context-Based Responses
-//
-// ==============================================
+
 
 import express from "express";
 import cors from "cors";
@@ -21,9 +7,7 @@ import { GoogleGenAI } from "@google/genai";
 
 dotenv.config();
 
-// ==============================================
-// App Config
-// ==============================================
+
 
 const app = express();
 
@@ -31,23 +15,17 @@ app.use(cors());
 
 app.use(express.json());
 
-// ==============================================
-// Gemini Initialization
-// ==============================================
+
 
 const ai = new GoogleGenAI({
   apiKey: process.env.API_KEY,
 });
 
-// ==============================================
-// Conversation History
-// ==============================================
+
 
 const history = [];
 
-// ==============================================
-// System Instruction
-// ==============================================
+
 
 const SYSTEM_INSTRUCTION = `
 Before we start, may I know your name?
@@ -110,9 +88,6 @@ You are ONLY an Engineering Tutor AI.
 Any unrelated request must be politely refused.
 `;
 
-// ==============================================
-// Chat API Route
-// ==============================================
 
 app.post("/", async (req, res) => {
 
@@ -120,18 +95,14 @@ app.post("/", async (req, res) => {
 
     const userProblem = req.body.message;
 
-    // ==========================================
-    // Store User Message
-    // ==========================================
+   
 
     history.push({
       role: "user",
       parts: [{ text: userProblem }],
     });
 
-    // ==========================================
-    // Generate AI Response
-    // ==========================================
+    
 
     const response = await ai.models.generateContent({
 
@@ -145,24 +116,19 @@ app.post("/", async (req, res) => {
 
     });
 
-    // ==========================================
-    // Extract Response Text
-    // ==========================================
+    
 
     const tutorReply = response.text;
 
-    // ==========================================
-    // Store Model Response
-    // ==========================================
+    
+   
 
     history.push({
       role: "model",
       parts: [{ text: tutorReply }],
     });
 
-    // ==========================================
-    // Send Response to Frontend
-    // ==========================================
+    
 
     res.status(200).json({
       success: true,
@@ -182,9 +148,7 @@ app.post("/", async (req, res) => {
   }
 });
 
-// ==============================================
-// Root Route
-// ==============================================
+
 
 app.get("/", (req, res) => {
 
@@ -192,9 +156,7 @@ app.get("/", (req, res) => {
 
 });
 
-// ==============================================
-// Server Start
-// ==============================================
+
 
 const PORT = 3000;
 

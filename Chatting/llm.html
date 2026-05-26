@@ -1,6 +1,4 @@
-<!-- ========================================= -->
-<!--      Anjali AI Chat Frontend UI           -->
-<!-- ========================================= -->
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +8,7 @@
 
   <title>Anjali AI Chat</title>
 
-  <!-- Google Font -->
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -169,7 +167,7 @@
 
   <div class="chat-container">
 
-    <!-- Header -->
+    
     <div class="chat-header">
 
       <div class="avatar"></div>
@@ -181,7 +179,7 @@
 
     </div>
 
-    <!-- Messages -->
+    
     <div class="chat-box" id="chatBox">
 
       <div class="message bot">
@@ -191,7 +189,7 @@
 
     </div>
 
-    <!-- Input -->
+    
     <div class="chat-input">
 
       <input
@@ -213,9 +211,7 @@
 const chatBox = document.getElementById("chatBox");
 const input = document.getElementById("userInput");
 
-// =========================================
-// Add Message Function
-// =========================================
+
 
 function addMessage(text, sender){
 
@@ -231,9 +227,7 @@ function addMessage(text, sender){
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// =========================================
-// Typing Animation
-// =========================================
+
 
 function showTyping(){
 
@@ -258,9 +252,7 @@ function removeTyping(){
   }
 }
 
-// =========================================
-// Send Message
-// =========================================
+
 
 async function sendMessage(){
 
@@ -276,9 +268,7 @@ async function sendMessage(){
 
   try{
 
-    // =========================================
-    // Backend API Call
-    // =========================================
+
 
     const response = await fetch("http://localhost:3000/chat", {
 
@@ -315,9 +305,7 @@ async function sendMessage(){
   }
 }
 
-// =========================================
-// Enter Key Support
-// =========================================
+
 
 input.addEventListener("keypress", function(e){
 

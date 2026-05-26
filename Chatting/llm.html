@@ -1,0 +1,333 @@
+<!-- ========================================= -->
+<!--      Anjali AI Chat Frontend UI           -->
+<!-- ========================================= -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Anjali AI Chat</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+      background:#0f172a;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      overflow:hidden;
+    }
+
+    .chat-container{
+      width:420px;
+      height:90vh;
+      background:#111827;
+      border-radius:25px;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+      box-shadow:0 0 30px rgba(0,0,0,0.4);
+    }
+
+    .chat-header{
+      background:#1f2937;
+      padding:18px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      border-bottom:1px solid #374151;
+    }
+
+    .avatar{
+      width:50px;
+      height:50px;
+      border-radius:50%;
+      background:url('https://i.imgur.com/qkdpN.jpg') center/cover;
+    }
+
+    .header-info h2{
+      color:white;
+      font-size:18px;
+    }
+
+    .header-info p{
+      color:#22c55e;
+      font-size:13px;
+    }
+
+    .chat-box{
+      flex:1;
+      padding:20px;
+      overflow-y:auto;
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+      scroll-behavior:smooth;
+    }
+
+    .message{
+      max-width:75%;
+      padding:12px 15px;
+      border-radius:18px;
+      line-height:1.5;
+      font-size:14px;
+      animation:fadeIn .3s ease;
+    }
+
+    .user{
+      background:#2563eb;
+      color:white;
+      align-self:flex-end;
+      border-bottom-right-radius:5px;
+    }
+
+    .bot{
+      background:#374151;
+      color:white;
+      align-self:flex-start;
+      border-bottom-left-radius:5px;
+    }
+
+    .chat-input{
+      padding:15px;
+      background:#1f2937;
+      display:flex;
+      gap:10px;
+      border-top:1px solid #374151;
+    }
+
+    .chat-input input{
+      flex:1;
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      outline:none;
+      background:#111827;
+      color:white;
+      font-size:14px;
+    }
+
+    .chat-input button{
+      border:none;
+      padding:14px 18px;
+      border-radius:12px;
+      background:#ec4899;
+      color:white;
+      cursor:pointer;
+      transition:.3s;
+      font-weight:600;
+    }
+
+    .chat-input button:hover{
+      background:#db2777;
+    }
+
+    .typing{
+      color:#9ca3af;
+      font-size:13px;
+      margin-left:5px;
+    }
+
+    @keyframes fadeIn{
+      from{
+        opacity:0;
+        transform:translateY(10px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    ::-webkit-scrollbar{
+      width:5px;
+    }
+
+    ::-webkit-scrollbar-thumb{
+      background:#4b5563;
+      border-radius:10px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="chat-container">
+
+    <!-- Header -->
+    <div class="chat-header">
+
+      <div class="avatar"></div>
+
+      <div class="header-info">
+        <h2>Anjali ❤️</h2>
+        <p>Online</p>
+      </div>
+
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-box" id="chatBox">
+
+      <div class="message bot">
+        Hey Rahul ❤️<br>
+        How was your day?
+      </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input">
+
+      <input
+        type="text"
+        id="userInput"
+        placeholder="Type your message..."
+      />
+
+      <button onclick="sendMessage()">
+        Send
+      </button>
+
+    </div>
+
+  </div>
+
+<script>
+
+const chatBox = document.getElementById("chatBox");
+const input = document.getElementById("userInput");
+
+// =========================================
+// Add Message Function
+// =========================================
+
+function addMessage(text, sender){
+
+  const msg = document.createElement("div");
+
+  msg.classList.add("message");
+  msg.classList.add(sender);
+
+  msg.innerHTML = text;
+
+  chatBox.appendChild(msg);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// =========================================
+// Typing Animation
+// =========================================
+
+function showTyping(){
+
+  const typing = document.createElement("div");
+
+  typing.classList.add("typing");
+  typing.id = "typing";
+
+  typing.innerText = "Anjali is typing...";
+
+  chatBox.appendChild(typing);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function removeTyping(){
+
+  const typing = document.getElementById("typing");
+
+  if(typing){
+    typing.remove();
+  }
+}
+
+// =========================================
+// Send Message
+// =========================================
+
+async function sendMessage(){
+
+  const userText = input.value.trim();
+
+  if(!userText) return;
+
+  addMessage(userText, "user");
+
+  input.value = "";
+
+  showTyping();
+
+  try{
+
+    // =========================================
+    // Backend API Call
+    // =========================================
+
+    const response = await fetch("http://localhost:3000/chat", {
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+        message:userText
+      })
+
+    });
+
+    const data = await response.json();
+
+    removeTyping();
+
+    addMessage(data.reply, "bot");
+
+  }
+
+  catch(error){
+
+    removeTyping();
+
+    addMessage(
+      "Something went wrong Rahul 😔",
+      "bot"
+    );
+
+    console.log(error);
+  }
+}
+
+// =========================================
+// Enter Key Support
+// =========================================
+
+input.addEventListener("keypress", function(e){
+
+  if(e.key === "Enter"){
+    sendMessage();
+  }
+
+});
+
+</script>
+
+</body>
+</html>
